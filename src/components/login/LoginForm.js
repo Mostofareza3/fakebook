@@ -48,6 +48,28 @@ export default function LoginForm({ setVisible }) {
       setError(error?.response?.data?.message);
     }
   };
+
+  const demoSubmit = async () => {
+    const demoEmail = "admin@gmail.com";
+    const demoPassword = "#admin";
+    try {
+      setLoading(true);
+      const { data } = await axios.post(
+        `${process.env.REACT_APP_BACKEND_URL}/login`,
+        {
+          email: demoEmail,
+          password: demoPassword,
+        }
+      );
+      dispatch({ type: "LOGIN", payload: data });
+      Cookies.set("user", JSON.stringify(data));
+      navigate("/");
+    } catch (error) {
+      setLoading(false);
+      setError(error?.response?.data?.message);
+    }
+  };
+
   return (
     <div className="login_wrap">
       <div className="login_1">
@@ -90,6 +112,9 @@ export default function LoginForm({ setVisible }) {
               </Form>
             )}
           </Formik>
+          <button onClick={demoSubmit} type="submit" className="demo_btn">
+            Demo User
+          </button>
           <Link to="/reset" className="forgot_password">
             Forgotten password?
           </Link>
